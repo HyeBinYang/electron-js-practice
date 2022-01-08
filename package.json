@@ -6,18 +6,19 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron .",
-    "build": "electron-builder"
+    "build": "electron-builder",
+    "release": "build"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/HyeBinYang/electron-js-practice.git"
+    "url": "git+https://github.com/HyeBinYang/electron-practice.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/HyeBinYang/electron-js-practice/issues"
+    "url": "https://github.com/HyeBinYang/electron-practice/issues"
   },
-  "homepage": "https://github.com/HyeBinYang/electron-js-practice#readme",
+  "homepage": "https://github.com/HyeBinYang/electron-practice#readme",
   "devDependencies": {
     "electron": "^16.0.6",
     "electron-builder": "^22.14.5"
@@ -25,5 +26,17 @@
   "dependencies": {
     "electron-log": "^4.4.4",
     "electron-updater": "^4.6.1"
+  },
+  "build": {
+    "appId": "com.applyhead.pingo",
+    "productName": "Pingo",
+    "copyright": "Copyright © year Sandeep Acharya",
+    "mac": {
+      "category": "public.app-category.developer-tools",
+      "type": "distribution"
+    },
+    "publish": [
+      "github"
+    ]
   }
 }
