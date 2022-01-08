@@ -1,11 +1,12 @@
 {
   "name": "electron",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron ."
+    "start": "electron .",
+    "build": "electron-builder"
   },
   "repository": {
     "type": "git",
@@ -18,6 +19,11 @@
   },
   "homepage": "https://github.com/HyeBinYang/electron-js-practice#readme",
   "devDependencies": {
-    "electron": "^16.0.6"
+    "electron": "^16.0.6",
+    "electron-builder": "^22.14.5"
+  },
+  "dependencies": {
+    "electron-log": "^4.4.4",
+    "electron-updater": "^4.6.1"
   }
 }

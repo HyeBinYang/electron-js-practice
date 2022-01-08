@@ -3,15 +3,15 @@
 // Modules to control application life and create native browser window
 const { app, BrowserWindow } = require("electron");
 const path = require("path");
+const { autoUpdater } = require("electron-updater");
 
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
-    webPreferences: {
-      preload: path.join(__dirname, "preload.js"),
-    },
+    // Hide menu bar
+    autoHideMenuBar: true,
   });
 
   // and load the index.html of the app.
@@ -21,25 +21,39 @@ const createWindow = () => {
   // mainWindow.webContents.openDevTools()
 };
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-app.whenReady().then(() => {
-  createWindow();
+/* Updater ======================================================*/
 
-  app.on("activate", () => {
-    // On macOS it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
-  });
+autoUpdater.on("checking-for-update", () => {
+  log.info("업데이트 확인 중...");
+});
+autoUpdater.on("update-available", (info) => {
+  log.info("업데이트가 가능합니다.");
+});
+autoUpdater.on("update-not-available", (info) => {
+  log.info("현재 최신버전입니다.");
+});
+autoUpdater.on("error", (err) => {
+  log.info("에러가 발생하였습니다. 에러내용 : " + err);
+});
+autoUpdater.on("download-progress", (progressObj) => {
+  let log_message = "다운로드 속도: " + progressObj.bytesPerSecond;
+  log_message = log_message + " - 현재 " + progressObj.percent + "%";
+  log_message = log_message + " (" + progressObj.transferred + "/" + progressObj.total + ")";
+  log.info(log_message);
+});
+autoUpdater.on("update-downloaded", (info) => {
+  log.info("업데이트가 완료되었습니다.");
+  autoUpdater.quitAndInstall();
 });
 
-// Quit when all windows are closed, except on macOS. There, it's common
-// for applications and their menu bar to stay active until the user quits
-// explicitly with Cmd + Q.
+app.on("ready", () => {
+  // 메인 창 생성
+  createWindow();
+
+  // 자동 업데이트 등록
+  autoUpdater.checkForUpdates();
+});
+
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") app.quit();
 });
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
