@@ -13,7 +13,6 @@ ipcRenderer.on("message", (event, text) => {
 });
 
 ipcRenderer.on("version", (event, text) => {
-  console.log(text);
   version.innerText = text;
 });
 

@@ -65,4 +65,5 @@ autoUpdater.on("download-progress", (progressObj) => {
 
 autoUpdater.on("update-downloaded", (info) => {
   dispatch("Update downloaded");
+  autoUpdater.quitAndInstall();
 });
