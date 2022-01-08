@@ -1,59 +1,68 @@
-// main.js
-
-// Modules to control application life and create native browser window
 const { app, BrowserWindow } = require("electron");
-const path = require("path");
 const { autoUpdater } = require("electron-updater");
 
-const createWindow = () => {
-  // Create the browser window.
-  const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
-    // Hide menu bar
-    autoHideMenuBar: true,
-  });
+let win;
 
-  // and load the index.html of the app.
-  mainWindow.loadFile("index.html");
-
-  // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+const dispatch = (data) => {
+  win.webContents.send("message", data);
 };
 
-/* Updater ======================================================*/
+const createDefaultWindow = () => {
+  win = new BrowserWindow({
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+    },
+  });
 
-autoUpdater.on("checking-for-update", () => {
-  log.info("업데이트 확인 중...");
-});
-autoUpdater.on("update-available", (info) => {
-  log.info("업데이트가 가능합니다.");
-});
-autoUpdater.on("update-not-available", (info) => {
-  log.info("현재 최신버전입니다.");
-});
-autoUpdater.on("error", (err) => {
-  log.info("에러가 발생하였습니다. 에러내용 : " + err);
-});
-autoUpdater.on("download-progress", (progressObj) => {
-  let log_message = "다운로드 속도: " + progressObj.bytesPerSecond;
-  log_message = log_message + " - 현재 " + progressObj.percent + "%";
-  log_message = log_message + " (" + progressObj.transferred + "/" + progressObj.total + ")";
-  log.info(log_message);
-});
-autoUpdater.on("update-downloaded", (info) => {
-  log.info("업데이트가 완료되었습니다.");
-  autoUpdater.quitAndInstall();
-});
+  win.on("closed", () => {
+    win = null;
+  });
+
+  win.loadFile("index.html");
+
+  return win;
+};
 
 app.on("ready", () => {
-  // 메인 창 생성
-  createWindow();
+  createDefaultWindow();
 
-  // 자동 업데이트 등록
-  autoUpdater.checkForUpdates();
+  autoUpdater.checkForUpdatesAndNotify();
+
+  win.webContents.on("did-finish-load", () => {
+    win.webContents.send("version", app.getVersion());
+  });
 });
 
 app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") app.quit();
+  app.quit();
+});
+
+autoUpdater.on("checking-for-update", () => {
+  dispatch("Checking for update...");
+});
+
+autoUpdater.on("update-available", (info) => {
+  dispatch("Update available.");
+});
+
+autoUpdater.on("update-not-available", (info) => {
+  dispatch("Update not available.");
+});
+
+autoUpdater.on("error", (err) => {
+  dispatch("Error in auto-updater. " + err);
+});
+
+autoUpdater.on("download-progress", (progressObj) => {
+  // let log_message = "Download speed: " + progressObj.bytesPerSecond
+  // log_message = log_message + ' - Downloaded ' + progressObj.percent + '%'
+  // log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')'
+  // dispatch(log_message)
+
+  win.webContents.send("download-progress", progressObj.percent);
+});
+
+autoUpdater.on("update-downloaded", (info) => {
+  dispatch("Update downloaded");
 });
