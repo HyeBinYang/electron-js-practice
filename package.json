@@ -1,13 +1,13 @@
 {
   "name": "electron",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron .",
-    "build": "electron-builder build",
-    "deploy": "electron-builder build --publish always"
+    "build": "electron-builder --x64",
+    "deploy": "electron-builder --x64 --publish always"
   },
   "repository": {
     "type": "git",
