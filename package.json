@@ -32,6 +32,10 @@
     "appId": "com.applyhead.pingo",
     "productName": "Pingo",
     "copyright": "Copyright © year Sandeep Acharya",
+    "mac": {
+      "category": "public.app-category.developer-tools",
+      "type": "distribution"
+    },
     "publish": [
       "github"
     ]
