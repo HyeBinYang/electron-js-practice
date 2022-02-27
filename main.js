@@ -21,6 +21,8 @@ const createDefaultWindow = () => {
 
   win.loadFile("index.html");
 
+  win.flashFrame(true);
+
   return win;
 };
 
