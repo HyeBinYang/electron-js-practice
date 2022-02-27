@@ -1,6 +1,6 @@
 {
   "name": "electron",
-  "version": "1.0.5",
+  "version": "1.0.1",
   "description": "",
   "main": "main.js",
   "scripts": {
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/HyeBinYang/electron-practice.git"
+    "url": "https://github.com/HyeBinYang/electron-practice.git"
   },
   "author": "",
   "license": "ISC",
@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "electron-log": "^4.4.4",
+    "electron-packager": "^15.4.0",
     "electron-updater": "^4.6.1"
   },
   "build": {
