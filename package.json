@@ -1,22 +1,34 @@
 {
   "name": "electron-release",
-  "version": "1.0.0",
+  "version": "1.0.902",
   "private": true,
+  "main": "public/electron.js",
+  "homepage": "./",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^12.1.3",
     "@testing-library/user-event": "^13.5.0",
+    "electron-is-dev": "^2.0.0",
+    "electron-updater": "^4.6.5",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-router-dom": "^6.2.1",
     "react-scripts": "5.0.0",
     "web-vitals": "^2.1.4"
   },
+  "devDependencies": {
+    "concurrently": "^7.0.0",
+    "cross-env": "^7.0.3",
+    "electron": "^17.1.0",
+    "electron-builder": "^22.14.13",
+    "wait-on": "^6.0.1"
+  },
   "scripts": {
-    "start": "react-scripts start",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "build": "electron-builder build --win",
-    "deploy": "electron-builder build --win --publish always"
+    "react:start": "react-scripts start",
+    "react:build": "react-scripts build",
+    "start": "concurrently \"cross-env NODE_ENV=development BROWSER=none npm run react:start\" \"wait-on http://localhost:3000 && electron .\"",
+    "build:test": "npm run react:build && electron-builder",
+    "build": "npm run react:build && electron-builder build --publish=always"
   },
   "repository": {
     "type": "git",
