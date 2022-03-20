@@ -1,13 +1,15 @@
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, dialog } = require("electron");
 const { autoUpdater } = require("electron-updater");
 const path = require("path");
 const isDev = require("electron-is-dev");
 const log = require("electron-log");
 const Store = require("electron-store");
+const ProgressBar = require("electron-progressbar");
 
 const store = new Store();
 const version = app.getVersion();
 let win;
+let progressBar;
 
 const createReleaseNoteWindow = () => {
   let releaseNoteWindow = new BrowserWindow({
@@ -49,17 +51,19 @@ const createDefaultWindow = () => {
 };
 
 app.on("ready", () => {
-  const storedVersion = store.get("version");
+  // const storedVersion = store.get("version");
+  createDefaultWindow();
+  autoUpdater.autoDownload = false;
   autoUpdater.checkForUpdates();
 
-  if (storedVersion) {
-    if (storedVersion !== version) {
-      createReleaseNoteWindow();
-      store.set("version", version);
-    }
-  } else {
-    store.set("version", version);
-  }
+  // if (storedVersion) {
+  //   if (storedVersion !== version) {
+  //     createReleaseNoteWindow();
+  //     store.set("version", version);
+  //   }
+  // } else {
+  //   store.set("version", version);
+  // }
 });
 
 app.on("window-all-closed", () => {
@@ -72,25 +76,64 @@ autoUpdater.on("checking-for-update", () => {
 
 autoUpdater.on("update-available", (info) => {
   log.info("업데이트 가능");
+  dialog
+    .showMessageBox({
+      type: "info",
+      title: "약국하이패스 업데이트",
+      message: "새 버전이 있습니다. 업데이트 하시겠습니까?",
+      buttons: ["업데이트", "나중에"],
+    })
+    .then((result) => {
+      const buttonIndex = result.response;
+      if (buttonIndex === 0) {
+        autoUpdater.downloadUpdate();
+        app.quit();
+
+        progressBar = new ProgressBar({
+          title: "약국하이패스 업데이트",
+          text: "업데이트중...",
+          style: {
+            text: {
+              height: "30px",
+            },
+          },
+        });
+      }
+    });
 });
 
 autoUpdater.on("update-not-available", (info) => {
   log.info("최신버전 입니다.");
-  createDefaultWindow();
 });
 
-autoUpdater.on("download-progress", (progressObj) => {
-  let log_message = "다운로드 속도: " + progressObj.bytesPerSecond;
-  log_message = log_message + " - 현재 " + progressObj.percent + "%";
-  log_message = log_message + " (" + progressObj.transferred + "/" + progressObj.total + ")";
-  log.info(log_message);
-});
+// autoUpdater.on("download-progress", (progressObj) => {
+//   let log_message = "다운로드 속도: " + progressObj.bytesPerSecond;
+//   log_message = log_message + " - 현재 " + progressObj.percent + "%";
+//   log_message = log_message + " (" + progressObj.transferred + "/" + progressObj.total + ")";
+//   log.info(log_message);
+// });
 
 autoUpdater.on("error", (err) => {
   log.info("에러발생: " + err);
 });
 
 autoUpdater.on("update-downloaded", (info) => {
-  log.info("업데이트 완료");
-  autoUpdater.quitAndInstall();
+  log.info("업데이트가 완료되었습니다.");
+
+  if (progressBar.isCompleted()) {
+    progressBar.setCompleted();
+  }
+
+  dialog
+    .showMessageBox({
+      type: "info",
+      title: "업데이트 완료",
+      message: "재시작 하시겠습니까?",
+      buttons: ["재시작", "나중에"],
+    })
+    .then((result) => {
+      const buttonIndex = result.response;
+
+      if (buttonIndex === 0) autoUpdater.quitAndInstall(false, true);
+    });
 });

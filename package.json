@@ -10,6 +10,7 @@
     "@testing-library/user-event": "^13.5.0",
     "electron-is-dev": "^2.0.0",
     "electron-log": "^4.4.6",
+    "electron-progressbar": "^2.0.1",
     "electron-store": "^8.0.1",
     "electron-updater": "^4.6.5",
     "react": "^17.0.2",
@@ -23,14 +24,15 @@
     "cross-env": "^7.0.3",
     "electron": "^17.1.0",
     "electron-builder": "^22.14.13",
+    "electron-winstaller": "^5.0.0",
     "wait-on": "^6.0.1"
   },
   "scripts": {
     "react:start": "react-scripts start",
     "react:build": "react-scripts build",
     "start": "concurrently \"cross-env NODE_ENV=development BROWSER=none npm run react:start\" \"wait-on http://localhost:3000 && electron .\"",
-    "build:test": "npm run react:build && electron-builder",
-    "build": "npm run react:build && electron-builder build --publish=always"
+    "build": "npm run react:build && electron-builder",
+    "release": "npm run react:build && electron-builder build --publish=always"
   },
   "repository": {
     "type": "git",
@@ -72,7 +74,7 @@
     "publish": [
       {
         "provider": "github",
-        "token": "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"
+        "token": "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"
       }
     ]
   }
