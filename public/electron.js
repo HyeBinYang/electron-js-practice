@@ -41,7 +41,8 @@ const createDefaultWindow = () => {
     win = null;
   });
 
-  win.loadURL(isDev ? "http://localhost:3000" : `file://${path.join(__dirname, "../build/index.html")}`);
+  // win.loadURL(isDev ? "http://localhost:3000" : `file://${path.join(__dirname, "../build/index.html")}`);
+  win.loadURL(isDev ? "http://localhost:3000" : "https://practice-317cc.web.app/");
 
   if (isDev) {
     win.webContents.openDevTools({ mode: "detach" });
@@ -52,9 +53,10 @@ const createDefaultWindow = () => {
 
 app.on("ready", () => {
   // const storedVersion = store.get("version");
-  autoUpdater.autoDownload = false;
-  autoUpdater.checkForUpdates();
+  // autoUpdater.autoDownload = false;
+  // autoUpdater.checkForUpdates();
 
+  createDefaultWindow();
   // if (storedVersion) {
   //   if (storedVersion !== version) {
   //     createReleaseNoteWindow();

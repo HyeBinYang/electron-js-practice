@@ -2,8 +2,6 @@
   "name": "electron-release",
   "version": "1.0.1",
   "private": true,
-  "main": "public/electron.js",
-  "homepage": "./",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^12.1.3",
@@ -32,7 +30,8 @@
     "react:build": "react-scripts build",
     "start": "concurrently \"cross-env NODE_ENV=development BROWSER=none npm run react:start\" \"wait-on http://localhost:3000 && electron .\"",
     "build": "npm run react:build && electron-builder",
-    "release": "npm run react:build && electron-builder build --publish=always"
+    "release": "npm run react:build && electron-builder build --publish=always",
+    "deploy": "npm run react:build && firebase deploy"
   },
   "repository": {
     "type": "git",
@@ -60,6 +59,17 @@
     "appId": "com.applyhead.pingo",
     "productName": "Pingo",
     "copyright": "Copyright © year Sandeep Acharya",
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/favicon.ico"
+    },
     "nsis": {
       "oneClick": false,
       "perMachine": true,
@@ -74,7 +84,7 @@
     "publish": [
       {
         "provider": "github",
-        "token": "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"
+        "token": "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"
       }
     ]
   }
