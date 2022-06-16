@@ -1,6 +1,6 @@
 {
   "name": "electron-release",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.2",
@@ -69,6 +69,7 @@
         }
       ],
       "icon": "build/favicon.ico",
+      "certificateSubjectName": "YMYD Corp.",
       "signingHashAlgorithms": ["sha256"],
       "publisherName": "YMYD Corp.",
       "signAndEditExecutable": true
@@ -87,10 +88,7 @@
     "publish": [
       {
         "provider": "github",
-        "private": true,
-        "owner": "HyeBinYang",
-        "repo": "electron-release-practice",
-        "token": "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"
+        "token": "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"
       }
     ]
   }
